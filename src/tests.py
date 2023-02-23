@@ -24,9 +24,9 @@ def run():
         sleep(1)
 
 thread = Thread(target=run)
-thread.start()
+# thread.start()
 
 for record in streamer.read():
     print(record)
 
-thread.join()
+# thread.join()

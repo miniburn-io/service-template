@@ -16,7 +16,6 @@ class KinesisStream(Stream):
         super().__init__()
         self.__client = client
         self.__stream_name = self.get_full_stream_name(stream_name)
-        print(f'{self.__stream_name=}')
         self.__record_model = record_model
 
     def read(self) -> Generator[BaseModel, None, None]:
@@ -35,11 +34,9 @@ class KinesisStream(Stream):
                     )['ShardIterator']
 
                 record_response = self.__client.get_records(ShardIterator=shard_iterators[shard_id])
-                print(record_response)
                 if "Records" in record_response:
                     for record in [record for record in record_response["Records"]]:
                         try:
-                            print(record)
                             yield self.__record_model.parse_raw(record["Data"])
                         except ValueError as err:
                             logger.error(
